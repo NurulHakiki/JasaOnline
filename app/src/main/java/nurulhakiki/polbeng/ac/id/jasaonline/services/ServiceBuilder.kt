@@ -2,9 +2,10 @@ package nurulhakiki.polbeng.ac.id.jasaonline.services
 
 import nurulhakiki.polbeng.ac.id.jasaonline.helpers.Config
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
+import java.util.concurrent.TimeUnit
 object ServiceBuilder {
     //create okhttp client
     private val okHttp: OkHttpClient.Builder = OkHttpClient.Builder()

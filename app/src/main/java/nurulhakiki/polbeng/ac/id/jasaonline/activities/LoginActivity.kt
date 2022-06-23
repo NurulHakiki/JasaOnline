@@ -38,22 +38,16 @@ class LoginActivity : AppCompatActivity() {
             val filter = HashMap<String, String>()
             filter["email"] = email
             filter["password"] = password
-            val userService: UserService =
-                ServiceBuilder.buildService(UserService::class.java)
-            val requestCall: Call<LoginResponse> =
-                userService.loginUser(filter)
-            requestCall.enqueue(object :
-                retrofit2.Callback<LoginResponse>{
-                override fun onFailure(call: Call<LoginResponse>, t:
-                Throwable) {
+            val userService: UserService = ServiceBuilder.buildService(UserService::class.java)
+            val requestCall: Call<LoginResponse> = userService.loginUser(filter)
+
+            requestCall.enqueue(object : retrofit2.Callback<LoginResponse>{
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                     Toast.makeText(this@LoginActivity, "Error terjadi ketika sedang login: " + t.toString(), Toast.LENGTH_LONG).show()
                 }
-                override fun onResponse(call: Call<LoginResponse>,
-                                        response: Response<LoginResponse>
-                ) {
+                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                     if(!response.body()?.error!!) {
-                        val loginResponse: LoginResponse? =
-                            response.body()
+                        val loginResponse: LoginResponse? = response.body()
                         loginResponse?.let {
                             val user: User = loginResponse.data
 
@@ -62,8 +56,7 @@ class LoginActivity : AppCompatActivity() {
                             loadMainActivity()
                         }
                     }else{
-                        Toast.makeText(this@LoginActivity, "Gagal login: "
-                                + response.body()?.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@LoginActivity, "Gagal login: " + response.body()?.message, Toast.LENGTH_LONG).show()
                     }
                 }
             })
@@ -72,8 +65,7 @@ class LoginActivity : AppCompatActivity() {
     private fun loadMainActivity() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.putExtra(Config.EXTRA_FRAGMENT_ID, R.id.nav_beranda)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                Intent.FLAG_ACTIVITY_CLEAR_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
 }
