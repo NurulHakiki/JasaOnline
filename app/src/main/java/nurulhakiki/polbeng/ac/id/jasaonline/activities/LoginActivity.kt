@@ -8,6 +8,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_login.*
 import nurulhakiki.polbeng.ac.id.jasaonline.R
 import nurulhakiki.polbeng.ac.id.jasaonline.helpers.Config
+import nurulhakiki.polbeng.ac.id.jasaonline.helpers.SessionHandler
 import nurulhakiki.polbeng.ac.id.jasaonline.models.LoginResponse
 import nurulhakiki.polbeng.ac.id.jasaonline.models.User
 import nurulhakiki.polbeng.ac.id.jasaonline.services.ServiceBuilder
@@ -16,13 +17,19 @@ import retrofit2.Call
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val session = SessionHandler(applicationContext)
+        if(session.isLoggedIn()){
+            loadMainActivity();
+        }
         setContentView(R.layout.activity_login)
 
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
+
             if(TextUtils.isEmpty(email)){
                 etEmail.error = "Email tidak boleh kosong!"
                 etEmail.requestFocus()
@@ -38,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
             val filter = HashMap<String, String>()
             filter["email"] = email
             filter["password"] = password
+
             val userService: UserService = ServiceBuilder.buildService(UserService::class.java)
             val requestCall: Call<LoginResponse> = userService.loginUser(filter)
 
@@ -50,6 +58,7 @@ class LoginActivity : AppCompatActivity() {
                         val loginResponse: LoginResponse? = response.body()
                         loginResponse?.let {
                             val user: User = loginResponse.data
+                            session.saveUser(user)
 
                             Toast.makeText(this@LoginActivity, "Pengguna ${user.nama} dengan email ${user.email} berhasil login!",
                             Toast.LENGTH_LONG).show()
@@ -60,6 +69,11 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             })
+        }
+        tvDaftar.setOnClickListener {
+            val intent = Intent(applicationContext,
+                RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
     private fun loadMainActivity() {
