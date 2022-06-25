@@ -54,4 +54,9 @@
 
     <!--form edit profile-->
     <string name="judul_password">Silahkan kosongkan password, jika tidak mau mengubahnya!</string>
+
+    <!--jasa list-->
+    <string name="service_ac_barokah">Service AC Barokah</string>
+    <string name="deskripsi_ringkas">Melayani service ac rumah, kantor,gedung dll</string>
+    <string name="rating">4</string>
 </resources>
